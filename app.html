@@ -20,9 +20,33 @@ function showRSS() {
 
 
 
-<button onclick="showRSS()">Get News from news.lk</button>
+
+<button onclick="showRSS()">Load News from news.lk and save to the Data Base</button>
+
+
+
+<button type="button" onclick="foo()">Retrieve news from Data Base</button>
+
+
+
+<script>
+  function foo() {
+    
+      xmlhttp=new XMLHttpRequest();
+      xmlhttp.onreadystatechange=function() {
+      if (this.readyState==4 && this.status==200) {
+        document.getElementById("dbOutput").innerHTML=this.responseText;
+      }
+    }
+    xmlhttp.open("GET","retrieve.php?q=",true);
+    xmlhttp.send();
+  }
+  </script>
+
+
 
 <br><br>
 <div id="rssOutput"></div>
+<div id="dbOutput"></div>
 </body>
 </html>

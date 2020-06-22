@@ -26,17 +26,16 @@ $channel_desc = $channel->getElementsByTagName('description')
 $channel_date = $channel->getElementsByTagName('lastBuildDate')
 ->item(0)->childNodes->item(0)->nodeValue;
 
+
+
 //selecting channel collection
-$channel = $RSS_ReaderDB->channel;
+$channelCollection = $RSS_ReaderDB->channelCollection;
 
 //insert channel data to db
-$insertOneResult = $channel->insertOne(
-  [ 'title' => $channel_title, 'link' => $channel_link, 'description' => $channel_desc, 'lastBuildDate' => $channel_date ]
+$insertOneResult = $channelCollection	->updateOne(
+  ['_id' => '01'],
+  ['$set' => ['title' => $channel_title, 'link' => $channel_link, 'description' => $channel_desc, 'lastBuildDate' => $channel_date ]]
 );
-
-
-
-
 
 
 //output elements from "<channel>"
@@ -46,6 +45,10 @@ echo("<br>");
 echo($channel_desc . "</p>");
 echo("Last updated at: ");
 echo(  $channel_date);
+
+
+//selecting news collection
+$newsCollection = $RSS_ReaderDB->newsCollection;
 
 //get and output "<item>" elements
 $x=$xmlDoc->getElementsByTagName('item');
@@ -66,6 +69,10 @@ for ($i=0; $i<=7; $i++) {
   echo ("Published at: ". $item_date);
   echo ("<hr style=\"height:4px;border-width:0;color:gray;background-color:gray\">");
  
+  $insertOneResult = $newsCollection	->updateOne(
+    ['_id' => $i+1],
+    [ '$set' => ['title' => $item_title, 'link' => $item_link, 'description' => $item_desc, 'lastBuildDate' => $item_date ]]
+  );
  }
 
 ?>
