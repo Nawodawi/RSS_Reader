@@ -1,8 +1,12 @@
-
-
-   
- 
 <?php
+
+require 'vendor\autoload.php';
+
+$client = new MongoDB\Client;
+//selecting db
+$RSS_ReaderDB = $client->RSS_ReaderDB;
+
+
 
 
 $xml=("https://www.news.lk/news?format=feed");
@@ -21,6 +25,19 @@ $channel_desc = $channel->getElementsByTagName('description')
 ->item(0)->childNodes->item(0)->nodeValue;
 $channel_date = $channel->getElementsByTagName('lastBuildDate')
 ->item(0)->childNodes->item(0)->nodeValue;
+
+//selecting channel collection
+$channel = $RSS_ReaderDB->channel;
+
+//insert channel data to db
+$insertOneResult = $channel->insertOne(
+  [ 'title' => $channel_title, 'link' => $channel_link, 'description' => $channel_desc, 'lastBuildDate' => $channel_date ]
+);
+
+
+
+
+
 
 //output elements from "<channel>"
 echo("<p><a href='" . $channel_link
